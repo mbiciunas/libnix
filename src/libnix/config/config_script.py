@@ -69,12 +69,16 @@ class ConfigScript:
     def get_tags(self) -> typing.List[str]:
         return self._script[self.SCRIPT_TAG]
 
-    def add_tags(self, tags: list):
+    def add_tags(self, tags: typing.List[str]):
         for _tag in tags:
             self.add_tag(_tag)
 
     def add_tag(self, tag: str):
         self._script[self.SCRIPT_TAG].append(tag)
+
+    def delete_tags(self, tags: typing.List[str]):
+        for _tag in tags:
+            self._script[self.SCRIPT_TAG].remove(_tag)
 
     def delete_tag(self, tag: str):
         self._script[self.SCRIPT_TAG].remove(tag)
