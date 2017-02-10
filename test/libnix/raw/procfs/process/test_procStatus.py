@@ -21,18 +21,16 @@ from libnix.raw.procfs.process.proc_status import ProcStatus
 
 
 class TestProcStatus:
-    _PID = 1617
-
     @pytest.fixture(scope="class")
-    def proc_status_valid(self):
-        _proc_status = ProcStatus(self._PID)
+    def proc_status_valid(self, pid):
+        _proc_status = ProcStatus(pid)
 
         _proc_status.load()
 
         return _proc_status
 
-    def test_load_process(self):
-        _proc_status = ProcStatus(self._PID)
+    def test_load_process(self, pid):
+        _proc_status = ProcStatus(pid)
 
         _proc_status.load()
 

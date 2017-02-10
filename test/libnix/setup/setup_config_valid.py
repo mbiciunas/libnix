@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import os
 from libnix.config.config import Config
 from .make_json import MakeJson
 
@@ -90,6 +91,9 @@ class SetupConfigValid:
 
     def config(self):
         return self._config
+
+    def get_pid(self):
+        return os.getpid()
 
     def set_count_tags(self, count: int):
         self._count_tags = count

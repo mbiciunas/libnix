@@ -21,18 +21,16 @@ from libnix.raw.procfs.process.proc_environ import ProcEnviron
 
 
 class TestProcEnviron:
-    _PID = 1617
-
     @pytest.fixture(scope="class")
-    def proc_environ_valid(self):
-        _proc_environ = ProcEnviron(self._PID)
+    def proc_environ_valid(self, pid):
+        _proc_environ = ProcEnviron(pid)
 
         _proc_environ.load()
 
         return _proc_environ
 
-    def test_load_process(self):
-        _proc_environ = ProcEnviron(self._PID)
+    def test_load_process(self, pid):
+        _proc_environ = ProcEnviron(pid)
 
         _proc_environ.load()
 

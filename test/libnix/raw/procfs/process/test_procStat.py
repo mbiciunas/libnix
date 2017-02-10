@@ -21,23 +21,21 @@ from libnix.raw.procfs.process.proc_stat import ProcStat
 
 
 class TestProcStat:
-    _PID = 1617
-
     @pytest.fixture(scope="class")
-    def proc_stat_valid(self):
-        _proc_stat = ProcStat(self._PID)
+    def proc_stat_valid(self, pid):
+        _proc_stat = ProcStat(pid)
 
         _proc_stat.load()
 
         return _proc_stat
 
-    def test_load_process(self):
-        proc_stat = ProcStat(self._PID)
+    def test_load_process(self, pid):
+        proc_stat = ProcStat(pid)
 
         proc_stat.load()
 
-    def test_get_pid(self, proc_stat_valid):
-        assert proc_stat_valid.get_pid == str(self._PID)
+    def test_get_pid(self, proc_stat_valid, pid):
+        assert proc_stat_valid.get_pid == str(pid)
 
     def test_get_command(self, proc_stat_valid):
         assert len(proc_stat_valid.get_command) > 0

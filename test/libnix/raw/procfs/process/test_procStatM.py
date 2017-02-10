@@ -21,18 +21,16 @@ from libnix.raw.procfs.process.proc_statm import ProcStatM
 
 
 class TestProcStatM:
-    _PID = 1617
-
     @pytest.fixture(scope="class")
-    def proc_statm_valid(self):
-        _proc_statm = ProcStatM(self._PID)
+    def proc_statm_valid(self, pid):
+        _proc_statm = ProcStatM(pid)
 
         _proc_statm.load()
 
         return _proc_statm
 
-    def test_load_process(self):
-        _proc_statm = ProcStatM(self._PID)
+    def test_load_process(self, pid):
+        _proc_statm = ProcStatM(pid)
 
         _proc_statm.load()
 

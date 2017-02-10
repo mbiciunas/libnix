@@ -21,18 +21,16 @@ from libnix.raw.procfs.process.proc_cmdline import ProcCmdline
 
 
 class TestProcCmdline:
-    _PID = 10326
-
     @pytest.fixture(scope="class")
-    def proc_cmdline_valid(self):
-        _proc_cmdline = ProcCmdline(self._PID)
+    def proc_cmdline_valid(self, pid):
+        _proc_cmdline = ProcCmdline(pid)
 
         _proc_cmdline.load()
 
         return _proc_cmdline
 
-    def test_load_process(self):
-        _proc_cmdline = ProcCmdline(self._PID)
+    def test_load_process(self, pid):
+        _proc_cmdline = ProcCmdline(pid)
 
         _proc_cmdline.load()
 

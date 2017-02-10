@@ -21,18 +21,16 @@ from libnix.raw.procfs.process.proc_comm import ProcComm
 
 
 class TestProcComm:
-    _PID = 1617
-
     @pytest.fixture(scope="class")
-    def proc_comm_valid(self):
-        _proc_comm = ProcComm(self._PID)
+    def proc_comm_valid(self, pid):
+        _proc_comm = ProcComm(pid)
 
         _proc_comm.load()
 
         return _proc_comm
 
-    def test_load_process(self):
-        _proc_comm = ProcComm(self._PID)
+    def test_load_process(self, pid):
+        _proc_comm = ProcComm(pid)
 
         _proc_comm.load()
 
