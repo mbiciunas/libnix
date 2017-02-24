@@ -17,6 +17,7 @@
 import typing
 
 from libnix.config.config import Config
+from libnix.exception.nix_error import NixError
 from libnix.utility.print_table import PrintTable
 
 
@@ -25,6 +26,11 @@ class ListScript:
         self._config = Config()
 
     def list(self, tags: typing.List[str] = list()):
+        _invalid_tags = self._config.get_tags().get_invalid_tags(tags)
+
+        if len(_invalid_tags) is not 0:
+            raise NixError("Unknown tags: {}".format(' '.join(_invalid_tags)))
+
         _rows = []
 
         for _script in self._config.get_scripts().find_by_tags(tags):
