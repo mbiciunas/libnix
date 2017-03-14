@@ -22,6 +22,7 @@ from libnix.exception.nix_error import NixError
 
 class AbstractRead(ABC):
     _PROC_PATH = "/proc"
+    _ETC_PATH = "/etc"
 
     def __init__(self):
         self._data = None
