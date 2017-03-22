@@ -1,15 +1,7 @@
-from stat import *
+from libnix.sys.fs.resultset import File
 
 
 class FilesystemFilter:
-    FILE_TYPE_DIR = "dir"
-    FILE_TYPE_REG = "regular"
-    FILE_TYPE_CHAR = "char"
-    FILE_TYPE_BLOCK = "block"
-    FILE_TYPE_FIFO = "fifo"
-    FILE_TYPE_LINK = "link"
-    FILE_TYPE_SOCK = "sock"
-
     def __init__(self):
         self._file_type = None
         self._user = None
@@ -25,6 +17,8 @@ class FilesystemFilter:
         self._other_read = None
         self._other_write = None
         self._other_exec = None
+        self._set_uid = None
+        self._set_gid = None
 
     def filter_type(self, *args):
         self._file_type = list(args)
@@ -54,36 +48,42 @@ class FilesystemFilter:
         self._other_write = other_write
         self._other_exec = other_exec
 
-    def test(self, pathname, statinfo):
-        if not self._test_file_type(statinfo.st_mode):
+    def filter_setid(self, uid=None, gid=None):
+        self._set_uid = uid
+        self._set_gid = gid
+
+    def test(self, file_info):
+        if not self._test_file_type(file_info.get_type()):
             return False
-        elif not self._test_user(statinfo.st_uid):
+        elif not self._test_user(file_info.get_user_id()):
             return False
-        elif not self._test_group(statinfo.st_gid):
+        elif not self._test_group(file_info.get_group_id()):
             return False
-        elif not self._test_size(statinfo.st_size):
+        elif not self._test_size(file_info.get_size()):
             return False
-        elif not self._test_permission(statinfo.st_mode):
+        elif not self._test_permission(file_info):
+            return False
+        elif not self._test_setid(file_info):
             return False
 
         return True
 
-    def _test_file_type(self, mode):
+    def _test_file_type(self, file_type):
         if self._file_type is None:
             return True
-        elif S_ISDIR(mode) and self.FILE_TYPE_DIR in self._file_type:
+        elif file_type is File.TYPE_DIR and File.TYPE_DIR in self._file_type:
             return True
-        elif S_ISREG(mode) and self.FILE_TYPE_REG in self._file_type:
+        elif file_type is File.TYPE_REG and File.TYPE_REG in self._file_type:
             return True
-        elif S_ISCHR(mode) and self.FILE_TYPE_CHAR in self._file_type:
+        elif file_type is File.TYPE_CHAR and File.TYPE_CHAR in self._file_type:
             return True
-        elif S_ISBLK(mode) and self.FILE_TYPE_BLOCK in self._file_type:
+        elif file_type is File.TYPE_BLOCK and File.TYPE_BLOCK in self._file_type:
             return True
-        elif S_ISFIFO(mode) and self.FILE_TYPE_FIFO in self._file_type:
+        elif file_type is File.TYPE_FIFO and File.TYPE_FIFO in self._file_type:
             return True
-        elif S_ISLNK(mode) and self.FILE_TYPE_LINK in self._file_type:
+        elif file_type is File.TYPE_LINK and File.TYPE_LINK in self._file_type:
             return True
-        elif S_ISSOCK(mode) and self.FILE_TYPE_SOCK in self._file_type:
+        elif file_type is File.TYPE_SOCK and File.TYPE_SOCK in self._file_type:
             return True
 
         return False
@@ -112,24 +112,32 @@ class FilesystemFilter:
         else:
             return True
 
-    def _test_permission(self, mode):
-        if self._user_read is not None and self._user_read is not bool(mode & S_IRUSR):
+    def _test_permission(self, file_info):
+        if self._user_read is not None and self._user_read is not file_info.get_user_read():
             return False
-        elif self._user_write is not None and self._user_write is not bool(mode & S_IWUSR):
+        elif self._user_write is not None and self._user_write is not file_info.get_user_write():
             return False
-        elif self._user_exec is not None and self._user_exec is not bool(mode & S_IXUSR):
+        elif self._user_exec is not None and self._user_exec is not file_info.get_user_execute():
             return False
-        elif self._group_read is not None and self._group_read is not bool(mode & S_IRGRP):
+        elif self._group_read is not None and self._group_read is not file_info.get_group_read():
             return False
-        elif self._group_write is not None and self._group_write is not bool(mode & S_IWGRP):
+        elif self._group_write is not None and self._group_write is not file_info.get_group_write():
             return False
-        elif self._group_exec is not None and self._group_exec is not bool(mode & S_IXGRP):
+        elif self._group_exec is not None and self._group_exec is not file_info.get_group_execute():
             return False
-        elif self._other_read is not None and self._other_read is not bool(mode & S_IROTH):
+        elif self._other_read is not None and self._other_read is not file_info.get_other_read():
             return False
-        elif self._other_write is not None and self._other_write is not bool(mode & S_IWOTH):
+        elif self._other_write is not None and self._other_write is not file_info.get_other_write():
             return False
-        elif self._other_exec is not None and self._other_exec is not bool(mode & S_IXOTH):
+        elif self._other_exec is not None and self._other_exec is not file_info.get_other_execute():
+            return False
+        else:
+            return True
+
+    def _test_setid(self, file_info):
+        if self._set_uid is not None and self._set_uid is not file_info.get_set_uid():
+            return False
+        elif self._set_gid is not None and self._set_gid is not file_info.get_set_gid():
             return False
         else:
             return True
