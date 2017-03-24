@@ -37,12 +37,21 @@ class Groups:
 
         return self._data.keys()
 
-    def get_group(self, name: str) -> iter:
+    def get_group_by_name(self, name: str) -> iter:
         if self._data is None:
             self.load()
 
         return self._data[name]
 
+    def get_group_by_id(self, gid: int) -> iter:
+        if self._data is None:
+            self.load()
+
+        for _group in self._data.values():
+            if _group.get_group_id() == gid:
+                return _group
+
+        return None
 
 class Group:
     _GROUP_NAME = "group"
@@ -70,8 +79,8 @@ class Group:
         return self._get_value(self._PASSWORD)
 
     # @property
-    def get_group_id(self) -> str:
-        return self._get_value(self._GROUP_ID)
+    def get_group_id(self) -> int:
+        return int(self._get_value(self._GROUP_ID))
 
     # @property
     def get_users(self) -> str:
@@ -90,7 +99,7 @@ def main():
     _groups.load()
 
     for _group_name in _groups.get_groups():
-        _group = _groups.get_group(_group_name)
+        _group = _groups.get_group_by_name(_group_name)
 
         print("Group: {}".format(_group.get_group()))
         print("   Password:     {}".format(_group.get_password()))

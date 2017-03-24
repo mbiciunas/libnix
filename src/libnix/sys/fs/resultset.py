@@ -13,7 +13,7 @@ class Resultset:
     def get_files(self):
         return self._files.values()
 
-    def get_file_count(self):
+    def get_file_count(self) -> int:
         return len(self._files)
 
 
@@ -30,52 +30,52 @@ class File:
         self._path = path
         self._statinfo = os.lstat(path)
 
-    def get_path(self):
+    def get_path(self) -> str:
         return self._path
 
-    def get_user_read(self):
+    def get_user_read(self) -> bool:
         return bool(self._statinfo.st_mode & S_IRUSR)
 
-    def get_user_write(self):
+    def get_user_write(self) -> bool:
         return bool(self._statinfo.st_mode & S_IWUSR)
 
-    def get_user_execute(self):
+    def get_user_execute(self) -> bool:
         return bool(self._statinfo.st_mode & S_IXUSR)
 
-    def get_group_read(self):
+    def get_group_read(self) -> bool:
         return bool(self._statinfo.st_mode & S_IRGRP)
 
-    def get_group_write(self):
+    def get_group_write(self) -> bool:
         return bool(self._statinfo.st_mode & S_IWGRP)
 
-    def get_group_execute(self):
+    def get_group_execute(self) -> bool:
         return bool(self._statinfo.st_mode & S_IXGRP)
 
-    def get_other_read(self):
+    def get_other_read(self) -> bool:
         return bool(self._statinfo.st_mode & S_IROTH)
 
-    def get_other_write(self):
+    def get_other_write(self) -> bool:
         return bool(self._statinfo.st_mode & S_IWOTH)
 
-    def get_other_execute(self):
+    def get_other_execute(self) -> bool:
         return bool(self._statinfo.st_mode & S_IXOTH)
 
-    def get_set_uid(self):
+    def get_set_uid(self) -> bool:
         return bool(self._statinfo.st_mode & S_ISUID)
 
-    def get_set_gid(self):
+    def get_set_gid(self) -> bool:
         return bool(self._statinfo.st_mode & S_ISGID)
 
-    def get_sticky_bit(self):
+    def get_sticky_bit(self) -> bool:
         return bool(self._statinfo.st_mode & S_ISVTX)
 
-    def get_user_id(self):
+    def get_user_id(self) -> int:
         return self._statinfo.st_uid
 
-    def get_group_id(self):
+    def get_group_id(self) -> int:
         return self._statinfo.st_gid
 
-    def get_size(self):
+    def get_size(self) -> int:
         return self._statinfo.st_size
 
     def get_type(self):

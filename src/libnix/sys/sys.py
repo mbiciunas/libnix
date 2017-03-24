@@ -16,15 +16,35 @@
 
 from libnix.sys.user.user import Users
 from libnix.sys.user.group import Groups
+from libnix.sys.fs.filesystem import Filesystem
 
 
 class Sys:
     def __init__(self):
-        self._users = Users()
-        self._groups = Groups()
+        pass
+        # self._users = Users()
+        # self._groups = Groups()
+        # self._filesystem = Filesystem()
 
-    def get_user_users(self) -> Users:
-        return self._users
+    @staticmethod
+    def get_users(load=False) -> Users:
+        _users = Users()
 
-    def get_user_groups(self) -> Groups:
-        return self._groups
+        if load:
+            _users.load()
+
+        return _users
+
+    @staticmethod
+    def get_groups(load=False) -> Groups:
+        _groups = Groups()
+
+        if load:
+            _groups.load()
+
+        return _groups
+
+    @staticmethod
+    def get_filesystem() -> Filesystem:
+        return Filesystem()
+

@@ -95,14 +95,14 @@ class Filesystem:
 
 if __name__ == '__main__':
     _filesystem = Filesystem()
-    _filesystem.path_include("/usr")
+    _filesystem.path_include("/")
     # _filesystem.path_include("/home")
     # _filesystem.path_exclude("lost+found")
     # _filesystem.path_exclude(".cache")
     # _filesystem.filter_file_type(File.TYPE_DIR, File.TYPE_REG, File.TYPE_LINK)
-    # _filesystem.filter_user(1000)
-    # _filesystem.filter_group(1000)
-    _filesystem.filter_setid(uid=True)
+    # _filesystem.filter_user(8)
+    _filesystem.filter_group(12)
+    # _filesystem.filter_setid(uid=True)
     # _filesystem.filter_size(size_min=10, size_max=1000)
     # _filesystem.filter_permission_user(read=True, write=True, execute=True)
     # _filesystem.filter_permission_group(read=True, write=True, execute=True)

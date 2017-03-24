@@ -37,11 +37,21 @@ class Users:
 
         return self._data.keys()
 
-    def get_user(self, name: str) -> iter:
+    def get_user_by_name(self, name: str) -> iter:
         if self._data is None:
             self.load()
 
         return self._data[name]
+
+    def get_user_by_id(self, uid: int) -> iter:
+        if self._data is None:
+            self.load()
+
+        for _user in self._data.values():
+            if _user.get_user_id() == uid:
+                return _user
+
+        return None
 
 
 class User:
@@ -77,12 +87,12 @@ class User:
         return self._get_value(self._PASSWORD)
 
     # @property
-    def get_user_id(self) -> str:
-        return self._get_value(self._USER_ID)
+    def get_user_id(self) -> int:
+        return int(self._get_value(self._USER_ID))
 
     # @property
-    def get_group_id(self) -> str:
-        return self._get_value(self._GROUP_ID)
+    def get_group_id(self) -> int:
+        return int(self._get_value(self._GROUP_ID))
 
     # @property
     def get_comment(self) -> str:
@@ -109,7 +119,7 @@ def main():
     _users.load()
 
     for _user_name in _users.get_users():
-        _user = _users.get_user(_user_name)
+        _user = _users.get_user_by_name(_user_name)
 
         print("Name: {}".format(_user.get_user()))
         print("   Password:     {}".format(_user.get_password()))
