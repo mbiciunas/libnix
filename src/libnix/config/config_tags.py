@@ -33,9 +33,9 @@ class ConfigTags:
 
     def get_invalid_tags(self, tags: list) -> typing.List[str]:
         # Use set to remove any duplicate tags
+        _invalid_tags = []
         _new_tags = list(set(tags))
         _existing_tags = [_tag.get_name() for _tag in self.list()]
-        _invalid_tags = []
 
         for _tag in _new_tags:
             if _tag not in _existing_tags:
