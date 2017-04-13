@@ -28,11 +28,11 @@ class ProcStatM(AbstractRead):
     _DATA = "data"
     _DIRTY = "dt"
 
-    def __init__(self, pid: int):
+    def __init__(self, pid: int) -> None:
         super().__init__()
         self._pid = pid
 
-    def load(self):
+    def load(self) -> None:
         self._data = dict()
 
         _path = os.path.join(self._PROC_PATH, str(self._pid), "statm")
@@ -77,21 +77,3 @@ class ProcStatM(AbstractRead):
     @property
     def get_dirty(self) -> str:
         return self._get_value(self._DIRTY)
-
-
-def main():
-    proc_statm = ProcStatM(1637)
-
-    print("SIZE:     {}".format(proc_statm.get_size))
-    print("RESIDENT: {}".format(proc_statm.get_resident))
-    print("SHARED:   {}".format(proc_statm.get_shared))
-    print("TEXT:     {}".format(proc_statm.get_text))
-    print("LIBRARY:  {}".format(proc_statm.get_library))
-    print("DATA:     {}".format(proc_statm.get_data))
-    print("DIRTY:    {}".format(proc_statm.get_dirty))
-
-    print("")
-
-
-if __name__ == "__main__":
-    main()

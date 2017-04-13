@@ -21,10 +21,10 @@ from libnix.raw.abstract_read import AbstractRead
 
 
 class Mounts(AbstractRead):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-    def load(self):
+    def load(self) -> None:
         self._data = dict()
 
         _path = os.path.join(self._PROC_PATH, "mounts")
@@ -55,7 +55,7 @@ class Mount:
     _TYPE = "type"
     _OPTIONS = "options"
 
-    def __init__(self, line):
+    def __init__(self, line) -> None:
         self._module = dict()
 
         _data = line.split()
@@ -87,23 +87,3 @@ class Mount:
             return self._module[item]
         except KeyError:
             return None
-
-
-def main():
-    _mounts = Mounts()
-
-    # _mounts.load()
-
-    for _mount_point in _mounts.get_mounts():
-        _mount = _mounts.get_mount(_mount_point)
-
-        print("{:<35} {:<25} {:<10} {:<80}".format(_mount.get_mount_point(),
-                                                   _mount.get_device(),
-                                                   _mount.get_filesystem_type(),
-                                                   _mount.get_options()))
-
-        # print("")
-
-
-if __name__ == "__main__":
-    main()

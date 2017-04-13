@@ -24,11 +24,11 @@ class AbstractRead(ABC):
     _PROC_PATH = "/proc"
     _ETC_PATH = "/etc"
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._data = None
 
     @abstractmethod
-    def load(self):
+    def load(self) -> None:
         pass
 
     @staticmethod

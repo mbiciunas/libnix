@@ -20,7 +20,7 @@ import typing
 
 class SysClassNet:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._PATH = "/sys/class/net"
 
         self._ADDR_ASSIGN_TYPE = "addr_assign_type"
@@ -198,19 +198,3 @@ class SysClassNet:
             return self._network[interface][item]
         except KeyError:
             return None
-
-
-def main():
-    sys_class_net = SysClassNet()
-
-    # sys_class_net.gather()
-
-    for _interface in sys_class_net.get_interfaces():
-        print("{}".format(_interface))
-        print("  address: {}".format(sys_class_net.get_address(_interface)))
-        print("  broadcast: {}".format(sys_class_net.get_broadcast(_interface)))
-        print("  flags: {}".format(sys_class_net.get_flags(_interface)))
-        print("  operstate: {}".format(sys_class_net.get_operstate(_interface)))
-
-if __name__ == "__main__":
-    main()

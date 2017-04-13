@@ -2,11 +2,11 @@ import os
 
 from libnix.sys.fs.filesystem_filter import FilesystemFilter
 from libnix.sys.fs.resultset import Resultset
-from libnix.sys.fs.resultset import File
+from libnix.sys.fs.resultset import FileInfo
 
 
 class Filesystem:
-    def __init__(self):
+    def __init__(self) -> None:
         self._resultset = Resultset()
         # self._files = OrderedDict()
         # self._filter = list()
@@ -15,40 +15,40 @@ class Filesystem:
 
         self._filter = FilesystemFilter()
 
-    # def filter(self, filesystem_filter):
+    # def filter(self, filesystem_filter) -> None:
     #     self._filter.append(filesystem_filter)
 
-    def filter_file_type(self, *args):
+    def filter_file_type(self, *args) -> None:
         self._filter.filter_type(*args)
 
-    def filter_user(self, *args):
+    def filter_user(self, *args) -> None:
         self._filter.filter_user(*args)
 
-    def filter_group(self, *args):
+    def filter_group(self, *args) -> None:
         self._filter.filter_group(*args)
 
-    def filter_size(self, size_min=None, size_max=None):
+    def filter_size(self, size_min: int=None, size_max: int=None) -> None:
         self._filter.filter_size(size_min, size_max)
 
-    def filter_permission_user(self, read=None, write=None, execute=None):
+    def filter_permission_user(self, read: bool=None, write: bool=None, execute: bool=None) -> None:
         self._filter.filter_permission_user(read, write, execute)
 
-    def filter_permission_group(self, read=None, write=None, execute=None):
+    def filter_permission_group(self, read: bool=None, write: bool=None, execute: bool=None) -> None:
         self._filter.filter_permission_group(read, write, execute)
 
-    def filter_permission_other(self, read=None, write=None, execute=None):
+    def filter_permission_other(self, read: bool=None, write: bool=None, execute: bool=None) -> None:
         self._filter.filter_permission_other(read, write, execute)
 
-    def filter_setid(self, uid=None, gid=None):
+    def filter_setid(self, uid: int=None, gid: int=None) -> None:
         self._filter.filter_setid(uid, gid)
 
-    def path_include(self, path):
+    def path_include(self, path: str) -> None:
         self._path_include.append(path)
 
-    def path_exclude(self, path):
+    def path_exclude(self, path: str) -> None:
         self._path_exclude.append(path)
 
-    def load(self):
+    def load(self) -> Resultset:
         if len(self._path_include) == 0:
             self._path_include.append("/")
 
@@ -57,13 +57,13 @@ class Filesystem:
 
         return self._resultset
 
-    def _load(self, path):
+    def _load(self, path: str) -> None:
         try:
             for _filename in os.listdir(path):
                 _pathname = os.path.join(path, _filename)
 
                 try:
-                    _file_info = File(_pathname)
+                    _file_info = FileInfo(_pathname)
                     # statinfo = os.lstat(_pathname)
                     # mode = statinfo.st_mode
                 except FileNotFoundError:
@@ -73,72 +73,21 @@ class Filesystem:
                     if not self._test_path_exclude(_pathname):
                         # self._files[_pathname] = statinfo
                         self._resultset.add(_file_info)
-                if _file_info.get_type() is File.TYPE_DIR:
+                if _file_info.get_type() is FileInfo.TYPE_DIR:
                     if not self._test_path_exclude(_pathname):
                         self._load(_pathname)
         except PermissionError:
             pass
 
-    def _test_path_exclude(self, pathname):
+    def _test_path_exclude(self, pathname: str) -> bool:
         for _path in self._path_exclude:
             if _path in pathname:
                 return True
 
         return False
 
-    def _test_filter(self, file_info):
+    def _test_filter(self, file_info: FileInfo) -> bool:
         if self._filter.test(file_info):
             return True
         else:
             return False
-
-
-if __name__ == '__main__':
-    _filesystem = Filesystem()
-    _filesystem.path_include("/")
-    # _filesystem.path_include("/home")
-    # _filesystem.path_exclude("lost+found")
-    # _filesystem.path_exclude(".cache")
-    # _filesystem.filter_file_type(File.TYPE_DIR, File.TYPE_REG, File.TYPE_LINK)
-    # _filesystem.filter_user(8)
-    _filesystem.filter_group(12)
-    # _filesystem.filter_setid(uid=True)
-    # _filesystem.filter_size(size_min=10, size_max=1000)
-    # _filesystem.filter_permission_user(read=True, write=True, execute=True)
-    # _filesystem.filter_permission_group(read=True, write=True, execute=True)
-    # _filesystem.filter_permission_other(read=None, write=None, execute=True)
-
-    _resultset = _filesystem.load()
-
-    print("len: {}".format(_resultset.get_file_count()))
-
-    for _file in _resultset.get_files():
-        _permission = ""
-        _permission += 'd' if _file.get_type() is File.TYPE_DIR else '-'
-        _permission += 'r' if _file.get_user_read() else '-'
-        _permission += 'w' if _file.get_user_write() else '-'
-        _permission += 'x' if _file.get_user_execute() else '-'
-        _permission += 'r' if _file.get_group_read() else '-'
-        _permission += 'w' if _file.get_group_write() else '-'
-        _permission += 'x' if _file.get_group_execute() else '-'
-        _permission += 'r' if _file.get_other_read() else '-'
-        _permission += 'w' if _file.get_other_write() else '-'
-        _permission += 'x' if _file.get_other_execute() else '-'
-
-        print("{} - {}".format(_permission, _file.get_path()))
-        # print("{}: {}-{}-{} - {}-{}-{} - {}-{}-{} {} {} {}".format(_file.get_path(),
-        #                                                            _file.get_user_read(),
-        #                                                            _file.get_user_write(),
-        #                                                            _file.get_user_execute(),
-        #
-        #                                                            _file.get_group_read(),
-        #                                                            _file.get_group_write(),
-        #                                                            _file.get_group_execute(),
-        #
-        #                                                            _file.get_other_read(),
-        #                                                            _file.get_other_write(),
-        #                                                            _file.get_other_execute(),
-        #
-        #                                                            _file.get_set_uid(),
-        #                                                            _file.get_set_gid(),
-        #                                                            _file.get_sticky_bit()))

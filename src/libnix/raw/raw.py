@@ -23,7 +23,7 @@ from libnix.raw.sysfs.clazz.net.stat.sys_class_net_stat import SysClassNetStat
 
 
 class Raw:
-    def __init__(self):
+    def __init__(self) -> None:
         self._diskstats = DiskStats()
         self._modules = Modules()
         self._mounts = Mounts()

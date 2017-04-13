@@ -22,11 +22,11 @@ from libnix.raw.abstract_read import AbstractRead
 class ProcComm(AbstractRead):
     _COMMAND = "size"
 
-    def __init__(self, pid: int):
+    def __init__(self, pid: int) -> None:
         super().__init__()
         self._pid = pid
 
-    def load(self):
+    def load(self) -> None:
         self._data = dict()
 
         _path = os.path.join(self._PROC_PATH, str(self._pid), "comm")
@@ -41,15 +41,3 @@ class ProcComm(AbstractRead):
     @property
     def get_command(self) -> str:
         return self._get_value(self._COMMAND)
-
-
-def main():
-    proc_comm = ProcComm(1637)
-
-    print("COMMAND:    {}".format(proc_comm.get_command))
-
-    print("")
-
-
-if __name__ == "__main__":
-    main()

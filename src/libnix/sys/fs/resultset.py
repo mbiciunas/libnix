@@ -1,23 +1,24 @@
 from collections import OrderedDict
 import os
 from stat import *
+import typing
 
 
 class Resultset:
-    def __init__(self):
+    def __init__(self) -> None:
         self._files = OrderedDict()
 
-    def add(self, file):
+    def add(self, file) -> None:
         self._files[file.get_path()] = file
 
-    def get_files(self):
+    def get_files(self) -> typing.List:
         return self._files.values()
 
     def get_file_count(self) -> int:
         return len(self._files)
 
 
-class File:
+class FileInfo:
     TYPE_DIR = "dir"
     TYPE_REG = "regular"
     TYPE_CHAR = "char"
@@ -26,7 +27,7 @@ class File:
     TYPE_LINK = "link"
     TYPE_SOCK = "sock"
 
-    def __init__(self, path):
+    def __init__(self, path: str) -> None:
         self._path = path
         self._statinfo = os.lstat(path)
 
@@ -78,7 +79,7 @@ class File:
     def get_size(self) -> int:
         return self._statinfo.st_size
 
-    def get_type(self):
+    def get_type(self) -> str:
         _mode = self._statinfo.st_mode
 
         if S_ISDIR(_mode):

@@ -22,11 +22,11 @@ from libnix.raw.abstract_read import AbstractRead
 class ProcEnviron(AbstractRead):
     _ARGS = "args"
 
-    def __init__(self, pid: int):
+    def __init__(self, pid: int) -> None:
         super().__init__()
         self._pid = pid
 
-    def load(self):
+    def load(self) -> None:
         self._data = dict()
 
         _path = os.path.join(self._PROC_PATH, str(self._pid), "environ")
@@ -46,31 +46,3 @@ class ProcEnviron(AbstractRead):
     @property
     def get_environments(self) -> str:
         return self._get_value(self._ARGS)
-
-
-def main():
-
-    run_environ(1637)
-
-    # run_environ("1620")
-
-    # run_environ("1383")
-
-
-def run_environ(pid: int):
-    proc_environ = ProcEnviron(pid)
-
-    print("PID:       {}".format(pid))
-    print("ARG COUNT: {}".format(proc_environ.get_environment_count))
-
-    if proc_environ.get_environment_count > 0:
-        print("ARGUMENTS: {}".format(proc_environ.get_environments[0]))
-
-    if proc_environ.get_environment_count > 1:
-        for index in range(1, proc_environ.get_environment_count):
-            print("           {}".format(proc_environ.get_environments[index]))
-
-    print("")
-
-if __name__ == "__main__":
-    main()

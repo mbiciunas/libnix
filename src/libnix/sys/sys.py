@@ -20,14 +20,11 @@ from libnix.sys.fs.filesystem import Filesystem
 
 
 class Sys:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
-        # self._users = Users()
-        # self._groups = Groups()
-        # self._filesystem = Filesystem()
 
     @staticmethod
-    def get_users(load=False) -> Users:
+    def get_users(load: bool=False) -> Users:
         _users = Users()
 
         if load:
@@ -36,7 +33,7 @@ class Sys:
         return _users
 
     @staticmethod
-    def get_groups(load=False) -> Groups:
+    def get_groups(load: bool=False) -> Groups:
         _groups = Groups()
 
         if load:

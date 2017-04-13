@@ -15,15 +15,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import typing
 
 from libnix.raw.abstract_read import AbstractRead
 
 
 class ReadGroup(AbstractRead):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-    def load(self):
+    def load(self) -> typing.List(str):
         _data = None
 
         _path = os.path.join(self._ETC_PATH, "group")
@@ -33,35 +34,3 @@ class ReadGroup(AbstractRead):
             _data = _file_read.splitlines()
 
         return _data
-
-    # def get_groups(self) -> iter:
-    #     if self._data is None:
-    #         self.load()
-    #
-    #     return self._data.keys()
-
-    # def get_group(self, name: str) -> iter:
-    #     if self._data is None:
-    #         self.load()
-    #
-    #     return self._data[name]
-
-
-# def main():
-#     _groups = Groups()
-#
-#     _groups.load()
-#
-#     for _group_name in _groups.get_groups():
-#         _group = _groups.get_group(_group_name)
-#
-#         print("Group: {}".format(_group.get_group()))
-#         print("   Password:     {}".format(_group.get_password()))
-#         print("   Group Id:     {}".format(_group.get_group_id()))
-#         print("   Users:      {}".format(_group.get_users()))
-#
-#         print("")
-#
-#
-# if __name__ == "__main__":
-#     main()

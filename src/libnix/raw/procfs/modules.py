@@ -21,10 +21,10 @@ from libnix.raw.abstract_read import AbstractRead
 
 
 class Modules(AbstractRead):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-    def load(self):
+    def load(self) -> None:
         self._data = dict()
 
         _path = os.path.join(self._PROC_PATH, "modules")
@@ -57,7 +57,7 @@ class Module:
     _STATE = "state"
     _MEMORY_OFFSET = "memory_offset"
 
-    def __init__(self, line):
+    def __init__(self, line: str) -> None:
         self._module = dict()
 
         _data = line.split()
@@ -99,32 +99,3 @@ class Module:
             return self._module[item]
         except KeyError:
             return None
-
-
-def main():
-    _modules = Modules()
-
-    _modules.load()
-
-    for _name in _modules.get_modules():
-        _module = _modules.get_module(_name)
-
-        if _module.get_instances is not "0":
-            print("{:<20} {:<10} {:<2} {:<80} {:<10} {:<10}".format(_module.get_name(),
-                                                                    _module.get_size(),
-                                                                    _module.get_instances(),
-                                                                    _module.get_dependencies(),
-                                                                    _module.get_state(),
-                                                                    _module.get_memory_offset()))
-            # print("   Size:          {}".format(_module.get_size()))
-            # print("   Instances:     {}".format(_module.get_instances()))
-            #
-            # print("   Dependencies:  {}".format(_module.get_dependencies()))
-            # print("   State:         {}".format(_module.get_state()))
-            # print("   Memory Offset: {}".format(_module.get_memory_offset()))
-
-            print("")
-
-
-if __name__ == "__main__":
-    main()

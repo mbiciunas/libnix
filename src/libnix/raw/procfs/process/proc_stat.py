@@ -66,11 +66,11 @@ class ProcStat(AbstractRead):
     _GUEST_TIME = "guest_time"
     _CHILD_GUEST_TIME = "cguest_time"
 
-    def __init__(self, pid: int):
+    def __init__(self, pid: int) -> None:
         super().__init__()
         self._pid = pid
 
-    def load(self):
+    def load(self) -> None:
         self._data = dict()
 
         _path = os.path.join(self._PROC_PATH, str(self._pid), "stat")
@@ -301,58 +301,3 @@ class ProcStat(AbstractRead):
     @property
     def get_child_guest_time(self) -> str:
         return self._get_value(self._CHILD_GUEST_TIME)
-
-
-def main():
-    proc_stat = ProcStat(1637)
-
-    print("PID:                  {}".format(proc_stat.get_pid))
-    print("COMMAND:              {}".format(proc_stat.get_command))
-    print("STATE:                {}".format(proc_stat.get_state))
-    print("PARENT_PID:           {}".format(proc_stat.get_parent_pid))
-    print("PROCESS_GROUP:        {}".format(proc_stat.get_process_group))
-    print("SESSION:              {}".format(proc_stat.get_session))
-    print("TTY_NR:               {}".format(proc_stat.get_tty_nr))
-    print("TPGID:                {}".format(proc_stat.get_tpgid))
-    print("FLAGS:                {}".format(proc_stat.get_flags))
-    print("MIN_FAULT:            {}".format(proc_stat.get_minor_fault))
-    print("CHILD_MIN_FAULT:      {}".format(proc_stat.get_child_minor_fault))
-    print("MAJOR_FAULT:          {}".format(proc_stat.get_major_fault))
-    print("CHILD_MAJOR_FAULT:    {}".format(proc_stat.get_child_major_fault))
-    print("UTIME:                {}".format(proc_stat.get_user_time))
-    print("STIME:                {}".format(proc_stat.get_system_time))
-    print("CHILD_UTIME:          {}".format(proc_stat.get_child_user_time))
-    print("CHILD_STIME:          {}".format(proc_stat.get_child_system_time))
-    print("PRIORITY:             {}".format(proc_stat.get_priority))
-    print("NICE:                 {}".format(proc_stat.get_nice))
-    print("THREADS:              {}".format(proc_stat.get_threads))
-    print("I_T_REAL_VALUE:       {}".format(proc_stat.get_i_t_real_value))
-    print("START_TIME:           {}".format(proc_stat.get_start_time))
-    print("VIRTUAL_SIZE:         {}".format(proc_stat.get_virtual_size))
-    print("RESIDENT_SET_SIZE:    {}".format(proc_stat.get_resident_set_size))
-    print("RSS_LIMIT:            {}".format(proc_stat.get_rss_limit))
-    print("START_CODE:           {}".format(proc_stat.get_start_code))
-    print("END_CODE:             {}".format(proc_stat.get_end_code))
-    print("START_STACK:          {}".format(proc_stat.get_start_stack))
-    print("KERNEL_STACK_ESP:     {}".format(proc_stat.get_kernel_stack_esp))
-    print("CURRENT_EIP:          {}".format(proc_stat.get_current_eip))
-    print("PENDING_SIGNAL:       {}".format(proc_stat.get_pending_signal))
-    print("BLOCKED_SIGNAL:       {}".format(proc_stat.get_blocked_signal))
-    print("IGNORED_SIGNAL:       {}".format(proc_stat.get_ignored_signal))
-    print("CAUGHT_SIGNAL:        {}".format(proc_stat.get_caught_signal))
-    print("WAIT_CHANNEL:         {}".format(proc_stat.get_wait_channel))
-    print("PAGE_SWAP:            {}".format(proc_stat.get_page_swap))
-    print("CUMULATIVE_PAGE_SWAP: {}".format(proc_stat.get_cumulative_page_swap))
-    print("EXIT_SIGNAL:          {}".format(proc_stat.get_exit_signal))
-    print("PROCESSOR:            {}".format(proc_stat.get_processor))
-    print("REAL_TIME_PRIORITY:   {}".format(proc_stat.get_real_time_priority))
-    print("POLICY:               {}".format(proc_stat.get_policy))
-    print("AGGREGATE_BLOCK_IO:   {}".format(proc_stat.get_aggregate_block_io))
-    print("GUEST_TIME:           {}".format(proc_stat.get_guest_time))
-    print("CHILD_GUEST_TIME:     {}".format(proc_stat.get_child_guest_time))
-
-    print("")
-
-
-if __name__ == "__main__":
-    main()

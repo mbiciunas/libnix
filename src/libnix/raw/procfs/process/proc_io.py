@@ -28,11 +28,11 @@ class ProcIO(AbstractRead):
     _BYTES_WRITE = "write_bytes"
     _CANCEL_BYTES_WRITE = "cancelled_write_bytes"
 
-    def __init__(self, pid: int):
+    def __init__(self, pid: int) -> None:
         super().__init__()
         self._pid = pid
 
-    def load(self):
+    def load(self) -> None:
         self._data = dict()
 
         _path = os.path.join(self._PROC_PATH, str(self._pid), "io")
@@ -85,21 +85,3 @@ class ProcIO(AbstractRead):
     @property
     def get_cancel_bytes_write(self) -> str:
         return self._get_value(self._CANCEL_BYTES_WRITE)
-
-
-def main():
-    proc_io = ProcIO(1637)
-
-    print("CHAR READ:          {}".format(proc_io.get_char_read))
-    print("CHAR WRITE:         {}".format(proc_io.get_char_write))
-    print("SYSTEM CALL READ:   {}".format(proc_io.get_call_read))
-    print("SYSTEM CALL WRITE:  {}".format(proc_io.get_call_write))
-    print("BYTES READ:         {}".format(proc_io.get_bytes_read))
-    print("BYTES WRITE:        {}".format(proc_io.get_bytes_write))
-    print("CANCEL BYTES WRITE: {}".format(proc_io.get_cancel_bytes_write))
-
-    print("")
-
-
-if __name__ == "__main__":
-    main()

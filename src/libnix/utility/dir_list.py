@@ -22,7 +22,7 @@ from libnix.utility.dir import Dir
 
 class DirList:
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     @staticmethod

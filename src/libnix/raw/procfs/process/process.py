@@ -25,7 +25,7 @@ from libnix.raw.procfs.process.proc_status import ProcStatus
 
 class Process:
 
-    def __init__(self, pid: int):
+    def __init__(self, pid: int) -> None:
         self._pid = pid
         self._cmdline = ProcCmdline(pid)
         self._comm = ProcComm(pid)

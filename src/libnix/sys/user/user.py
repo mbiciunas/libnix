@@ -20,10 +20,10 @@ from libnix.raw.etc.passwd import Passwd
 
 
 class Users:
-    def __init__(self):
+    def __init__(self) -> None:
         self._data = dict()
 
-    def load(self):
+    def load(self) -> None:
         _passwd = Passwd()
 
         for _line in _passwd.load():
@@ -31,19 +31,19 @@ class Users:
 
             self._data[_user.get_user()] = _user
 
-    def get_users(self) -> iter:
+    def get_users(self) -> typing.List:
         if self._data is None:
             self.load()
 
         return self._data.keys()
 
-    def get_user_by_name(self, name: str) -> iter:
+    def get_user_by_name(self, name: str) -> User:
         if self._data is None:
             self.load()
 
         return self._data[name]
 
-    def get_user_by_id(self, uid: int) -> iter:
+    def get_user_by_id(self, uid: int) -> typing.Optional(User):
         if self._data is None:
             self.load()
 
@@ -64,7 +64,7 @@ class User:
     _DIRECTORY = "dir"
     _SHELL = "shell"
 
-    def __init__(self, line):
+    def __init__(self, line: str) -> None:
         self._user = dict()
 
         _data = line.split(":")
@@ -111,26 +111,3 @@ class User:
             return self._user[item]
         except KeyError:
             return None
-
-
-def main():
-    _users = Users()
-
-    _users.load()
-
-    for _user_name in _users.get_users():
-        _user = _users.get_user_by_name(_user_name)
-
-        print("Name: {}".format(_user.get_user()))
-        print("   Password:     {}".format(_user.get_password()))
-        print("   User Id:      {}".format(_user.get_user_id()))
-        print("   Group Id:     {}".format(_user.get_group_id()))
-        print("   Comment:      {}".format(_user.get_comment()))
-        print("   Directory:    {}".format(_user.get_directory()))
-        print("   Shell:        {}".format(_user.get_shell()))
-
-        print("")
-
-
-if __name__ == "__main__":
-    main()

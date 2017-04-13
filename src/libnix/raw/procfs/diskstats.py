@@ -21,7 +21,7 @@ from libnix.raw.abstract_read import AbstractRead
 
 
 class DiskStats(AbstractRead):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     def load(self):
@@ -67,7 +67,7 @@ class DiskStat:
     _IO_TIME = "time_spent_doing_IO"
     _IO_TIME_WEIGHTED = "weighted_time_spent_doing_IO"
 
-    def __init__(self, line):
+    def __init__(self, line) -> None:
         self._disk = dict()
 
         _data = line.split()
@@ -149,39 +149,3 @@ class DiskStat:
             return self._disk[item]
         except KeyError:
             return None
-
-
-def main():
-    _diskstats = DiskStats()
-
-    _diskstats.load()
-
-    for _name in _diskstats.get_disks():
-        _disk = _diskstats.get_disk(_name)
-
-        print("Name: {}".format(_disk.get_device_name()))
-        print("   Device Major:     {}".format(_disk.get_device_major()))
-        print("   Device Minor:     {}".format(_disk.get_device_minor()))
-
-        print("   Read")
-        print("      Completed:     {}".format(_disk.get_read_completed()))
-        print("      Merged:        {}".format(_disk.get_read_merged()))
-        print("      Sectors:       {}".format(_disk.get_read_sectors()))
-        print("      Time:          {}".format(_disk.get_read_time()))
-
-        print("   Write")
-        print("      Completed:     {}".format(_disk.get_write_completed()))
-        print("      Merged:        {}".format(_disk.get_write_merged()))
-        print("      Sectors:       {}".format(_disk.get_write_sectors()))
-        print("      Time:          {}".format(_disk.get_write_time()))
-
-        print("   IO")
-        print("      In Progress:   {}".format(_disk.get_io_in_progress()))
-        print("      Time:          {}".format(_disk.get_io_time()))
-        print("      Time Weighted: {}".format(_disk.get_io_time_weighted()))
-
-        print("")
-
-
-if __name__ == "__main__":
-    main()

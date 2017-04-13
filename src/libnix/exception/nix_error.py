@@ -21,7 +21,7 @@ class Error(Exception):
 
 
 class NixError(Error):
-    def __init__(self, message: str, exception: Exception=None):
+    def __init__(self, message: str, exception: Exception=None) -> None:
         self._message = message
         self._exception = exception
 

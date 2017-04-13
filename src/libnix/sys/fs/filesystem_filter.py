@@ -1,8 +1,8 @@
-from libnix.sys.fs.resultset import File
+from libnix.sys.fs.resultset import FileInfo
 
 
 class FilesystemFilter:
-    def __init__(self):
+    def __init__(self) -> None:
         self._file_type = None
         self._user = None
         self._group = None
@@ -20,39 +20,39 @@ class FilesystemFilter:
         self._set_uid = None
         self._set_gid = None
 
-    def filter_type(self, *args):
+    def filter_type(self, *args) -> None:
         self._file_type = list(args)
 
-    def filter_user(self, *args):
+    def filter_user(self, *args) -> None:
         self._user = list(args)
 
-    def filter_group(self, *args):
+    def filter_group(self, *args) -> None:
         self._group = list(args)
 
-    def filter_size(self, size_min=None, size_max=None):
+    def filter_size(self, size_min: int=None, size_max: int=None) -> None:
         self._size_min = size_min
         self._size_max = size_max
 
-    def filter_permission_user(self, user_read=None, user_write=None, user_exec=None):
+    def filter_permission_user(self, user_read: bool=None, user_write: bool=None, user_exec: bool=None) -> None:
         self._user_read = user_read
         self._user_write = user_write
         self._user_exec = user_exec
 
-    def filter_permission_group(self, group_read=None, group_write=None, group_exec=None):
+    def filter_permission_group(self, group_read: bool=None, group_write: bool=None, group_exec: bool=None) -> None:
         self._group_read = group_read
         self._group_write = group_write
         self._group_exec = group_exec
 
-    def filter_permission_other(self, other_read=None, other_write=None, other_exec=None):
+    def filter_permission_other(self, other_read: bool=None, other_write: bool=None, other_exec: bool=None) -> None:
         self._other_read = other_read
         self._other_write = other_write
         self._other_exec = other_exec
 
-    def filter_setid(self, uid=None, gid=None):
+    def filter_setid(self, uid: int=None, gid: int=None) -> None:
         self._set_uid = uid
         self._set_gid = gid
 
-    def test(self, file_info):
+    def test(self, file_info: FileInfo) -> bool:
         if not self._test_file_type(file_info.get_type()):
             return False
         elif not self._test_user(file_info.get_user_id()):
@@ -68,27 +68,27 @@ class FilesystemFilter:
 
         return True
 
-    def _test_file_type(self, file_type):
+    def _test_file_type(self, file_type: str) -> bool:
         if self._file_type is None:
             return True
-        elif file_type is File.TYPE_DIR and File.TYPE_DIR in self._file_type:
+        elif file_type is FileInfo.TYPE_DIR and FileInfo.TYPE_DIR in self._file_type:
             return True
-        elif file_type is File.TYPE_REG and File.TYPE_REG in self._file_type:
+        elif file_type is FileInfo.TYPE_REG and FileInfo.TYPE_REG in self._file_type:
             return True
-        elif file_type is File.TYPE_CHAR and File.TYPE_CHAR in self._file_type:
+        elif file_type is FileInfo.TYPE_CHAR and FileInfo.TYPE_CHAR in self._file_type:
             return True
-        elif file_type is File.TYPE_BLOCK and File.TYPE_BLOCK in self._file_type:
+        elif file_type is FileInfo.TYPE_BLOCK and FileInfo.TYPE_BLOCK in self._file_type:
             return True
-        elif file_type is File.TYPE_FIFO and File.TYPE_FIFO in self._file_type:
+        elif file_type is FileInfo.TYPE_FIFO and FileInfo.TYPE_FIFO in self._file_type:
             return True
-        elif file_type is File.TYPE_LINK and File.TYPE_LINK in self._file_type:
+        elif file_type is FileInfo.TYPE_LINK and FileInfo.TYPE_LINK in self._file_type:
             return True
-        elif file_type is File.TYPE_SOCK and File.TYPE_SOCK in self._file_type:
+        elif file_type is FileInfo.TYPE_SOCK and FileInfo.TYPE_SOCK in self._file_type:
             return True
 
         return False
 
-    def _test_user(self, user):
+    def _test_user(self, user: int) -> bool:
         if self._user is None:
             return True
         elif user in self._user:
@@ -96,7 +96,7 @@ class FilesystemFilter:
 
         return False
 
-    def _test_group(self, group):
+    def _test_group(self, group: int) -> bool:
         if self._group is None:
             return True
         elif group in self._group:
@@ -104,7 +104,7 @@ class FilesystemFilter:
 
         return False
 
-    def _test_size(self, size):
+    def _test_size(self, size: int) -> bool:
         if self._size_min is not None and self._size_min > size:
             return False
         elif self._size_max is not None and self._size_max < size:
@@ -112,7 +112,7 @@ class FilesystemFilter:
         else:
             return True
 
-    def _test_permission(self, file_info):
+    def _test_permission(self, file_info: FileInfo) -> bool:
         if self._user_read is not None and self._user_read is not file_info.get_user_read():
             return False
         elif self._user_write is not None and self._user_write is not file_info.get_user_write():
@@ -134,7 +134,7 @@ class FilesystemFilter:
         else:
             return True
 
-    def _test_setid(self, file_info):
+    def _test_setid(self, file_info: FileInfo) -> bool:
         if self._set_uid is not None and self._set_uid is not file_info.get_set_uid():
             return False
         elif self._set_gid is not None and self._set_gid is not file_info.get_set_gid():

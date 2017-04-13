@@ -20,10 +20,10 @@ from libnix.raw.etc.read_group import ReadGroup
 
 
 class Groups:
-    def __init__(self):
+    def __init__(self) -> None:
         self._data = dict()
 
-    def load(self):
+    def load(self) -> None:
         _read_group = ReadGroup()
 
         for _line in _read_group.load():
@@ -31,19 +31,19 @@ class Groups:
 
             self._data[_group.get_group()] = _group
 
-    def get_groups(self) -> iter:
+    def get_groups(self) -> typing.List:
         if self._data is None:
             self.load()
 
         return self._data.keys()
 
-    def get_group_by_name(self, name: str) -> iter:
+    def get_group_by_name(self, name: str) -> Group:
         if self._data is None:
             self.load()
 
         return self._data[name]
 
-    def get_group_by_id(self, gid: int) -> iter:
+    def get_group_by_id(self, gid: int) -> typing.Optional(Group):
         if self._data is None:
             self.load()
 
@@ -53,13 +53,14 @@ class Groups:
 
         return None
 
+
 class Group:
     _GROUP_NAME = "group"
     _PASSWORD = "password"
     _GROUP_ID = "group_id"
     _USERS = "users"
 
-    def __init__(self, line):
+    def __init__(self, line) -> None:
         self._group = dict()
 
         _data = line.split(":")
@@ -91,23 +92,3 @@ class Group:
             return self._group[item]
         except KeyError:
             return None
-
-
-def main():
-    _groups = Groups()
-
-    _groups.load()
-
-    for _group_name in _groups.get_groups():
-        _group = _groups.get_group_by_name(_group_name)
-
-        print("Group: {}".format(_group.get_group()))
-        print("   Password:     {}".format(_group.get_password()))
-        print("   Group Id:     {}".format(_group.get_group_id()))
-        print("   Users:      {}".format(_group.get_users()))
-
-        print("")
-
-
-if __name__ == "__main__":
-    main()

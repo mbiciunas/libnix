@@ -15,15 +15,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import typing
 
 from libnix.raw.abstract_read import AbstractRead
 
 
 class Passwd(AbstractRead):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-    def load(self):
+    def load(self) -> typing.List(str):
         _data = None
 
         _path = os.path.join(self._ETC_PATH, "passwd")
@@ -33,38 +34,3 @@ class Passwd(AbstractRead):
             _data = _file_read.splitlines()
 
         return _data
-
-    # def get_users(self) -> iter:
-    #     if self._data is None:
-    #         self.load()
-    #
-    #     return self._data.keys()
-
-    # def get_user(self, name: str) -> iter:
-    #     if self._data is None:
-    #         self.load()
-    #
-    #     return self._data[name]
-
-
-# def main():
-#     _passwd = Passwd()
-#
-#     _passwd.load()
-#
-#     for _user_name in _passwd.get_users():
-#         _user = _passwd.get_user(_user_name)
-#
-#         print("Name: {}".format(_user.get_user()))
-#         print("   Password:     {}".format(_user.get_password()))
-#         print("   User Id:      {}".format(_user.get_user_id()))
-#         print("   Group Id:     {}".format(_user.get_group_id()))
-#         print("   Comment:      {}".format(_user.get_comment()))
-#         print("   Directory:    {}".format(_user.get_directory()))
-#         print("   Shell:        {}".format(_user.get_shell()))
-#
-#         print("")
-#
-#
-# if __name__ == "__main__":
-#     main()
