@@ -94,7 +94,7 @@ class Users:
         if self._data is None:
             self.load()
 
-        return self._data.keys()
+        return list(self._data.keys())
 
     def get_user_by_name(self, name: str) -> User:
         if self._data is None:

@@ -142,7 +142,7 @@ class DiskStats(AbstractRead):
         if self._data is None:
             self.load()
 
-        return self._data.keys()
+        return list(self._data.keys())
 
     def get_disk(self, name: str) -> DiskStat:
         if self._data is None:

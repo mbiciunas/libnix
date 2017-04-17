@@ -43,7 +43,7 @@ class Pids:
         if self._pids is None:
             self.load()
 
-        return self._pids.keys()
+        return list(self._pids.keys())
 
     def get_process(self, pid: str) -> int:
         return self._pids[pid]

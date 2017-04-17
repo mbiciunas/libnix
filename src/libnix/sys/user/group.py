@@ -75,7 +75,7 @@ class Groups:
         if self._data is None:
             self.load()
 
-        return self._data.keys()
+        return list(self._data.keys())
 
     def get_group_by_name(self, name: str) -> Group:
         if self._data is None:

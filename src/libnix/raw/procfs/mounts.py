@@ -80,7 +80,7 @@ class Mounts(AbstractRead):
         if self._data is None:
             self.load()
 
-        return self._data.keys()
+        return list(self._data.keys())
 
     def get_mount(self, mount_point: str) -> Mount:
         if self._data is None:

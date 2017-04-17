@@ -92,7 +92,7 @@ class Modules(AbstractRead):
         if self._data is None:
             self.load()
 
-        return self._data.keys()
+        return list(self._data.keys())
 
     def get_module(self, name: str) -> Module:
         if self._data is None:

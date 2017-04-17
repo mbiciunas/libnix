@@ -106,7 +106,7 @@ class SysClassNetStat:
         return _data
 
     def get_interfaces(self) -> typing.List[str]:
-        return self._network.keys()
+        return list(self._network.keys())
 
     def get_stat_collisions(self, interface: str) -> str:
         return self._get_value(interface, self._STAT_COLLISIONS)
