@@ -24,7 +24,7 @@ class Pids:
     def __init__(self) -> None:
         self._PATH = "/proc"
 
-        self._pids = {}
+        self._pids = None
 
         self.load()
 
@@ -35,14 +35,17 @@ class Pids:
             if _name.isdigit():
                 self._pids[_name] = Process(int(_name))
 
-    def _get_immediate_subdirectories(self) -> list:
+    def _get_immediate_subdirectories(self) -> typing.List[str]:
         return [name for name in os.listdir(self._PATH) if os.path.isdir(os.path.join(self._PATH, name))]
 
     @property
-    def get_pids(self) -> iter:
+    def get_pids(self) -> typing.List[str]:
+        if self._pids is None:
+            self.load()
+
         return self._pids.keys()
 
-    def get_process(self, pid: str) -> typing.Any:
+    def get_process(self, pid: str) -> int:
         return self._pids[pid]
 
     def find_process(self, name: str) -> typing.Optional[str]:

@@ -20,35 +20,6 @@ import typing
 from libnix.raw.abstract_read import AbstractRead
 
 
-class Modules(AbstractRead):
-    def __init__(self) -> None:
-        super().__init__()
-
-    def load(self) -> None:
-        self._data = dict()
-
-        _path = os.path.join(self._PROC_PATH, "modules")
-        _file_read = self._read(_path)
-
-        if _file_read is not None:
-            for _line in _file_read.splitlines():
-                _module = Module(_line)
-
-                self._data[_module.get_name()] = _module
-
-    def get_modules(self) -> iter:
-        if self._data is None:
-            self.load()
-
-        return self._data.keys()
-
-    def get_module(self, name: str) -> iter:
-        if self._data is None:
-            self.load()
-
-        return self._data[name]
-
-
 class Module:
     _NAME = "name"
     _SIZE = "size"
@@ -99,3 +70,32 @@ class Module:
             return self._module[item]
         except KeyError:
             return None
+
+
+class Modules(AbstractRead):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def load(self) -> None:
+        self._data = dict()
+
+        _path = os.path.join(self._PROC_PATH, "modules")
+        _file_read = self._read(_path)
+
+        if _file_read is not None:
+            for _line in _file_read.splitlines():
+                _module = Module(_line)
+
+                self._data[_module.get_name()] = _module
+
+    def get_modules(self) -> typing.List[str]:
+        if self._data is None:
+            self.load()
+
+        return self._data.keys()
+
+    def get_module(self, name: str) -> Module:
+        if self._data is None:
+            self.load()
+
+        return self._data[name]

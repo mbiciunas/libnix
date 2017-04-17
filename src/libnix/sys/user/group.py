@@ -19,41 +19,6 @@ import typing
 from libnix.raw.etc.read_group import ReadGroup
 
 
-class Groups:
-    def __init__(self) -> None:
-        self._data = dict()
-
-    def load(self) -> None:
-        _read_group = ReadGroup()
-
-        for _line in _read_group.load():
-            _group = Group(_line)
-
-            self._data[_group.get_group()] = _group
-
-    def get_groups(self) -> typing.List:
-        if self._data is None:
-            self.load()
-
-        return self._data.keys()
-
-    def get_group_by_name(self, name: str) -> Group:
-        if self._data is None:
-            self.load()
-
-        return self._data[name]
-
-    def get_group_by_id(self, gid: int) -> typing.Optional(Group):
-        if self._data is None:
-            self.load()
-
-        for _group in self._data.values():
-            if _group.get_group_id() == gid:
-                return _group
-
-        return None
-
-
 class Group:
     _GROUP_NAME = "group"
     _PASSWORD = "password"
@@ -92,3 +57,38 @@ class Group:
             return self._group[item]
         except KeyError:
             return None
+
+
+class Groups:
+    def __init__(self) -> None:
+        self._data = dict()
+
+    def load(self) -> None:
+        _read_group = ReadGroup()
+
+        for _line in _read_group.load():
+            _group = Group(_line)
+
+            self._data[_group.get_group()] = _group
+
+    def get_groups(self) -> typing.List:
+        if self._data is None:
+            self.load()
+
+        return self._data.keys()
+
+    def get_group_by_name(self, name: str) -> Group:
+        if self._data is None:
+            self.load()
+
+        return self._data[name]
+
+    def get_group_by_id(self, gid: int) -> typing.Optional[Group]:
+        if self._data is None:
+            self.load()
+
+        for _group in self._data.values():
+            if _group.get_group_id() == gid:
+                return _group
+
+        return None

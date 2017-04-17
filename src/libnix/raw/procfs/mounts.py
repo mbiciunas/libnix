@@ -20,35 +20,6 @@ import typing
 from libnix.raw.abstract_read import AbstractRead
 
 
-class Mounts(AbstractRead):
-    def __init__(self) -> None:
-        super().__init__()
-
-    def load(self) -> None:
-        self._data = dict()
-
-        _path = os.path.join(self._PROC_PATH, "mounts")
-        _file_read = self._read(_path)
-
-        if _file_read is not None:
-            for _line in _file_read.splitlines():
-                _mount = Mount(_line)
-
-                self._data[_mount.get_mount_point()] = _mount
-
-    def get_mounts(self) -> iter:
-        if self._data is None:
-            self.load()
-
-        return self._data.keys()
-
-    def get_mount(self, mount_point: str) -> iter:
-        if self._data is None:
-            self.load()
-
-        return self._data[mount_point]
-
-
 class Mount:
     _DEVICE = "device"
     _MOUNT_POINT = "mount_point"
@@ -87,3 +58,32 @@ class Mount:
             return self._module[item]
         except KeyError:
             return None
+
+
+class Mounts(AbstractRead):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def load(self) -> None:
+        self._data = dict()
+
+        _path = os.path.join(self._PROC_PATH, "mounts")
+        _file_read = self._read(_path)
+
+        if _file_read is not None:
+            for _line in _file_read.splitlines():
+                _mount = Mount(_line)
+
+                self._data[_mount.get_mount_point()] = _mount
+
+    def get_mounts(self) -> typing.List[str]:
+        if self._data is None:
+            self.load()
+
+        return self._data.keys()
+
+    def get_mount(self, mount_point: str) -> Mount:
+        if self._data is None:
+            self.load()
+
+        return self._data[mount_point]

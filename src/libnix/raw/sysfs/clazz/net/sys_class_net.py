@@ -52,15 +52,20 @@ class SysClassNet:
         self._TYPE = "type"
         self._UEVENT = "uevent"
 
-        self._network = {}
+        self._network = None
+
+        self.load()
+
+    def load(self) -> None:
+        self._network = dict()
 
         for _name in self._get_immediate_subdirectories():
             self._network[_name] = self._gather_interface(_name)
 
-    def _get_immediate_subdirectories(self) -> list:
+    def _get_immediate_subdirectories(self) -> typing.List[str]:
         return [name for name in os.listdir(self._PATH) if os.path.isdir(os.path.join(self._PATH, name))]
 
-    def _gather_interface(self, interface: str) -> dict:
+    def _gather_interface(self, interface: str) -> typing.Dict[str, str]:
         _interface = {}
 
         _path = os.path.join(self._PATH, interface)
@@ -106,7 +111,7 @@ class SysClassNet:
 
         return _data
 
-    def get_interfaces(self) -> iter:
+    def get_interfaces(self) -> typing.List[str]:
         return self._network.keys()
 
     def get_addr_assign_type(self, interface: str) -> str:

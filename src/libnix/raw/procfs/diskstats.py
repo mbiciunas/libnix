@@ -20,35 +20,6 @@ import typing
 from libnix.raw.abstract_read import AbstractRead
 
 
-class DiskStats(AbstractRead):
-    def __init__(self) -> None:
-        super().__init__()
-
-    def load(self):
-        self._data = dict()
-
-        _path = os.path.join(self._PROC_PATH, "diskstats")
-        _file_read = self._read(_path)
-
-        if _file_read is not None:
-            for _line in _file_read.splitlines():
-                _disk_stat = DiskStat(_line)
-
-                self._data[_disk_stat.get_device_name()] = _disk_stat
-
-    def get_disks(self) -> iter:
-        if self._data is None:
-            self.load()
-
-        return self._data.keys()
-
-    def get_disk(self, name: str) -> iter:
-        if self._data is None:
-            self.load()
-
-        return self._data[name]
-
-
 class DiskStat:
     _DEVICE_MAJOR = "major_number"
     _DEVICE_MINOR = "minor_number"
@@ -149,3 +120,32 @@ class DiskStat:
             return self._disk[item]
         except KeyError:
             return None
+
+
+class DiskStats(AbstractRead):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def load(self):
+        self._data = dict()
+
+        _path = os.path.join(self._PROC_PATH, "diskstats")
+        _file_read = self._read(_path)
+
+        if _file_read is not None:
+            for _line in _file_read.splitlines():
+                _disk_stat = DiskStat(_line)
+
+                self._data[_disk_stat.get_device_name()] = _disk_stat
+
+    def get_disks(self) -> typing.List[str]:
+        if self._data is None:
+            self.load()
+
+        return self._data.keys()
+
+    def get_disk(self, name: str) -> DiskStat:
+        if self._data is None:
+            self.load()
+
+        return self._data[name]

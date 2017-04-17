@@ -24,7 +24,7 @@ class Passwd(AbstractRead):
     def __init__(self) -> None:
         super().__init__()
 
-    def load(self) -> typing.List(str):
+    def load(self) -> typing.List[str]:
         _data = None
 
         _path = os.path.join(self._ETC_PATH, "passwd")

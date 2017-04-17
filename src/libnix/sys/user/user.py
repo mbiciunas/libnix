@@ -19,41 +19,6 @@ import typing
 from libnix.raw.etc.passwd import Passwd
 
 
-class Users:
-    def __init__(self) -> None:
-        self._data = dict()
-
-    def load(self) -> None:
-        _passwd = Passwd()
-
-        for _line in _passwd.load():
-            _user = User(_line)
-
-            self._data[_user.get_user()] = _user
-
-    def get_users(self) -> typing.List:
-        if self._data is None:
-            self.load()
-
-        return self._data.keys()
-
-    def get_user_by_name(self, name: str) -> User:
-        if self._data is None:
-            self.load()
-
-        return self._data[name]
-
-    def get_user_by_id(self, uid: int) -> typing.Optional(User):
-        if self._data is None:
-            self.load()
-
-        for _user in self._data.values():
-            if _user.get_user_id() == uid:
-                return _user
-
-        return None
-
-
 class User:
     _USER_NAME = "user"
     _PASSWORD = "password"
@@ -111,3 +76,38 @@ class User:
             return self._user[item]
         except KeyError:
             return None
+
+
+class Users:
+    def __init__(self) -> None:
+        self._data = dict()
+
+    def load(self) -> None:
+        _passwd = Passwd()
+
+        for _line in _passwd.load():
+            _user = User(_line)
+
+            self._data[_user.get_user()] = _user
+
+    def get_users(self) -> typing.List[str]:
+        if self._data is None:
+            self.load()
+
+        return self._data.keys()
+
+    def get_user_by_name(self, name: str) -> User:
+        if self._data is None:
+            self.load()
+
+        return self._data[name]
+
+    def get_user_by_id(self, uid: int) -> typing.Optional[User]:
+        if self._data is None:
+            self.load()
+
+        for _user in self._data.values():
+            if _user.get_user_id() == uid:
+                return _user
+
+        return None
